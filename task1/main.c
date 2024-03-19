@@ -4,9 +4,10 @@
 #include <omp.h>
 #include "math.h"
 
-#define EPSILON 0.1
-#define N 3000
-#define NB 128
+#define EPSILON 0.0001
+#define N 100
+#define NB 64
+#define THREADS 1
 
 void free_uf(double **u, double **f)
 {
@@ -22,42 +23,40 @@ void free_uf(double **u, double **f)
 void create_matrix(double **u, double **f)
 {
     int x, y;
+    double h = 1.0 / (N + 1);
 
     for (x = 0; x < N; x++)
     {
         for (y = 0; y < N; y++)
         {
-            if (x == 0)
-            {
-                u[x][y] = (100 - 200 * y);
-            }
-            else if (x == 1)
-                u[x][y] = (-100 + 200 * y);
-            else if (y == 0)
-                u[x][y] = (100 - 200 * x);
+            double x1 = 500 * x * h;
+            double y1 = 300 * y * h;
+            if (y == 0)
+                u[x][y] = 100 - 200 * x;
+            else if (x == 0)
+                u[x][y] = 100 - 200 * y;
             else if (y == 1)
-                u[x][y] = (-100 + 200 * x);
+                u[x][y] = -100 + 200 * x;
+            else if (x == 1)
+                u[x][y] = -100 + 200 * y;
 
             else
             {
-                u[x][y] = (double)(rand() % 100);
+                u[x][y] = 0.0;
             }
-            // u[x][y] = 6000 * x + 9000 * y;
-            f[x][y] = 0.0;
+            f[x][y] = 0;
         }
     }
 }
 
-int algo(double **u, double **f)
+void algo(double **u, double **f)
 {
     double dmax;
-    int iter = 0;
     int block_size = (N - 2) / NB;
     double *dm = calloc(block_size, sizeof(*dm));
     double h = 1.0 / (N + 1);
     do
     {
-        iter++;
         dmax = 0.0;
         for (int nx = 0; nx < block_size; nx++)
         {
@@ -87,7 +86,6 @@ int algo(double **u, double **f)
                         }
                     }
                 }
-
                 if (dm[i] < d)
                 {
                     dm[i] = d;
@@ -95,14 +93,14 @@ int algo(double **u, double **f)
             }
         }
 
-        for (int nx = block_size - 2; nx >= 0; nx--)
+        for (int nx = block_size; nx >= 0; nx--)
         {
             int i, j;
             double d;
 #pragma omp parallel for shared(nx, dm) private(i, j, d)
             for (int i = block_size - nx - 1; i < block_size; i++)
             {
-                int j = block_size + ((block_size - 2) - nx) - i;
+                int j = block_size + ((block_size)-nx) - i;
                 int x0 = 1 + i * NB;
                 int xmax = fmin(x0 + NB, N - 1);
                 int y0 = 1 + j * NB;
@@ -136,15 +134,12 @@ int algo(double **u, double **f)
                 dmax = dm[i];
         }
     } while (dmax > EPSILON);
-
-    return iter;
 }
 
 int main()
 {
     double t1, t2;
-    int threads = 8;
-    omp_set_num_threads(threads);
+    omp_set_num_threads(THREADS);
     t1 = omp_get_wtime();
 
     double **u = (double **)malloc(N * sizeof(double *));
@@ -157,13 +152,12 @@ int main()
     }
     create_matrix(u, f);
 
-    int iter = algo(u, f);
+    algo(u, f);
 
     t2 = omp_get_wtime();
-    printf("threads = %d;    ", threads);
+    printf("threads = %d;    ", THREADS);
     printf("size = %d;   ", N);
     printf("time = %f;   ", t2 - t1);
-    printf("iter = %d.", iter);
 
     free_uf(u, f);
 }
