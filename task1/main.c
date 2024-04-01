@@ -4,10 +4,10 @@
 #include <omp.h>
 #include "math.h"
 
-#define EPSILON 0.0001
-#define N 100
+#define EPSILON 0.1
+#define N 150
 #define NB 64
-#define THREADS 1
+#define THREADS 4
 
 void free_uf(double **u, double **f)
 {
@@ -29,8 +29,8 @@ void create_matrix(double **u, double **f)
     {
         for (y = 0; y < N; y++)
         {
-            double x1 = 500 * x * h;
-            double y1 = 300 * y * h;
+            double x1 = 1000 * sin(x * h);
+            double y1 = 2000 * sin(y * h);
             if (y == 0)
                 u[x][y] = 100 - 200 * x;
             else if (x == 0)
@@ -44,7 +44,9 @@ void create_matrix(double **u, double **f)
             {
                 u[x][y] = 0.0;
             }
-            f[x][y] = 0;
+            f[x][y] = -1000 * sin(x * h) - 2000 * sin(x * h);
+
+            ;
         }
     }
 }
