@@ -1,0 +1,34 @@
+ФАЙЛ 180x180 
+NUMPY
+--- 0.08108925819396973 seconds ---
+SIMPLE
+--- 7.647087812423706 seconds ---
+ADVANCED
+--- 2.412858724594116 seconds ---
+
+
+ФАЙЛ 320х240
+NUMPY
+--- 0.1554408073425293 seconds ---
+SIMPLE
+--- 50.194278955459595 seconds ---
+ADVANCED
+--- 6.393561124801636 seconds ---
+
+
+ФАЙЛ 480х360
+NUMPY
+--- 0.28453874588012695 seconds ---
+SIMPLE
+--- 660.2037873268127 seconds ---
+ADVANCED
+--- 13.501344442367554 seconds ---
+
+
+ФАЙЛ 640x640
+NUMPY
+--- 0.7093367576599121 seconds ---
+SIMPLE
+--- 2244.9929854869843 seconds ---
+ADVANCED
+--- 42.53195357322693 seconds ---
