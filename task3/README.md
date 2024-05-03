@@ -31,7 +31,7 @@
 - SVD на основе метода, использующий преобразование Хаусхолдера
 
 ## Эксперимент
-Было проведено 12 экспериментов при N = 2:
+Было проведено 9 экспериментов при N = 2:
 | Original | NumPy | Simple | Advanced |
 | -------|-------|-----------|----------|
 | ![1](images/180х180.bmp) | ![2](images/180х180numpy.bmp) | ![3](images/180х180simple.bmp) | ![4](images/180х180advanced.bmp) | 
@@ -42,10 +42,6 @@
 | ![1](images/320х240.bmp) | ![2](images/320x240numpy.bmp) | ![3](images/320x240simple.bmp) | ![4](images/320x240advanced.bmp) | 
 
 -------------
-| Original | NumPy | Simple | Advanced |
-| -------|-------|-----------|----------|
-| ![1](images/480х360.bmp) | ![2](images/480x360numpy.bmp) | ![3](images/480x360simple.bmp) | ![4](images/480x360advanced.bmp) | 
-----------------------
 
 | Original | NumPy | Simple | Advanced |
 | -------|-------|-----------|----------|
